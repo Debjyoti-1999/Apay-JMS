@@ -6,6 +6,10 @@ package.APayJiraManagementService = {
         1.0 = {
             HappierTrails = 3.7;
             JDK17 = 1.0;
+            Lombok = 1.18.x;
+            LombokUtils = 1.1;
+            LombokApi = 1.18.x;
+            LambdaBuild = 1.0;
         };
     };
 
@@ -15,6 +19,12 @@ package.APayJiraManagementService = {
             Maven-com-amazonaws_aws-lambda-java-core = 1.x;
             Maven-com-amazonaws_aws-lambda-java-log4j2 = 1.x;
             Maven-org-apache-logging-log4j_log4j-layout-template-json = 2.x;
+            Maven-com-amazonaws_aws-lambda-java-events = 3.x;
+            AwsJavaSdk-ElasticsearchService = 2.0;
+            Maven-org-elasticsearch-client_elasticsearch-rest-high-level-client = 7.10.2;
+            Aws-request-signing-apache-interceptor = 3.x;
+            AwsJavaSdk-Sts = 2.0;
+            AwsJavaSdk-SecretsManager = 2.0;
         };
     };
 
@@ -22,6 +32,14 @@ package.APayJiraManagementService = {
         1.0 = {
             JUnit5 = 5.x;
             Maven-org-mockito_mockito-core = 5.x;
+        };
+    };
+
+    remove-dependencies = {
+        1.0 = {
+            Maven-org-apache-httpcomponents_httpcore = 4.x;
+            Maven-org-apache-httpcomponents_httpclient = 4.x;
+            Maven-org-apache-httpcomponents_httpcore-nio = 4.x;
         };
     };
 
