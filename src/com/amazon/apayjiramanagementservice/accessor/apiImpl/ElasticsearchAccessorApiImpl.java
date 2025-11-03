@@ -35,12 +35,14 @@ public class ElasticsearchAccessorApiImpl implements ElasticsearchAccessorApi {
         // Input validation
         validateQueryLogsByMessageInput(indices, message, minutesAgo);
 
+        log.info("Query: {} ", message);
+
             SearchRequest searchRequest = new SearchRequest(indices);
             SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 
             searchSourceBuilder.query(
                     QueryBuilders.boolQuery()
-                            .must(QueryBuilders.matchQuery(ElasticsearchQueryParams.MESSAGE.getValue(), message))
+                            .must(QueryBuilders.queryStringQuery(message))
                             .must(QueryBuilders.rangeQuery(ElasticsearchQueryParams.TIMESTAMP.getValue())
                                     .gte(Instant.now().minus(minutesAgo, ChronoUnit.MINUTES).toString())
                                     .lte(Instant.now().toString()))
@@ -50,6 +52,32 @@ public class ElasticsearchAccessorApiImpl implements ElasticsearchAccessorApi {
             searchRequest.source(searchSourceBuilder);
 
             return executeWithRetry(searchRequest, MAX_RETRIES);
+    }
+
+
+    @Override
+    public SearchResponse queryLogsByMessage(String indices, String message, int minutesAgo, int size)
+            throws IOException, InternalServiceException {
+        // Input validation
+        validateQueryLogsByMessageInput(indices, message, minutesAgo);
+
+        log.info("Query: {} ", message);
+
+        SearchRequest searchRequest = new SearchRequest(indices);
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+
+        searchSourceBuilder.query(
+                QueryBuilders.boolQuery()
+                        .must(QueryBuilders.queryStringQuery(message))
+                        .must(QueryBuilders.rangeQuery(ElasticsearchQueryParams.TIMESTAMP.getValue())
+                                .gte(Instant.now().minus(minutesAgo, ChronoUnit.MINUTES).toString())
+                                .lte(Instant.now().toString()))
+        ).size(size);
+
+        searchSourceBuilder.sort(ElasticsearchQueryParams.TIMESTAMP.getValue(), SortOrder.ASC);
+        searchRequest.source(searchSourceBuilder);
+
+        return executeWithRetry(searchRequest, MAX_RETRIES);
     }
 
     @Override
@@ -63,7 +91,7 @@ public class ElasticsearchAccessorApiImpl implements ElasticsearchAccessorApi {
 
             searchSourceBuilder.query(
                     QueryBuilders.boolQuery()
-                            .must(QueryBuilders.matchQuery(ElasticsearchQueryParams.MESSAGE.getValue(), message))
+                            .must(QueryBuilders.queryStringQuery(message))
                             .must(QueryBuilders.matchQuery(ElasticsearchQueryParams.LEVEL.getValue(), level))
                             .must(QueryBuilders.matchQuery(ElasticsearchQueryParams.SERVICE_NAME.getValue(),
                                     serviceName))
@@ -83,14 +111,13 @@ public class ElasticsearchAccessorApiImpl implements ElasticsearchAccessorApi {
         int attempts = 0;
         while (attempts < maxRetries) {
             try {
-                log.info("Search query: {}", request.source().toString());
                 return esClient.search(request, RequestOptions.DEFAULT);
             } catch (IOException e) {
                 attempts++;
                 if (attempts == maxRetries) throw e;
-                log.warn("Retry attempt {} after error: {}", attempts, e.getMessage());
+                log.error("Retry attempt {} after error: ", attempts, e);
                 try {
-                    Thread.sleep(1000 * attempts);
+                    Thread.sleep(1000L * attempts);
                 } catch (InterruptedException ie) {
                     Thread.currentThread().interrupt();
                     throw new InternalServiceException("Interrupted during retry", ie);

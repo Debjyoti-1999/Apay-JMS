@@ -12,7 +12,7 @@ public enum IAMRole {
     ),
 
     RECHARGE_CYGNUS_ELASTIC_SEARCH_ACCESS_ROLE_BETA(
-            "arn:aws:iam::051826734866:role/MasterRoleForElasticSearchBetaAccount",
+            "arn:aws:iam::051826734866:role/RechargeCygnusElasticSearchBeta",
             "ElasticsearchSession",
             "051826734866"
     );

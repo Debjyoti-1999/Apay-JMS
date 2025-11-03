@@ -24,11 +24,11 @@ public class JiraIssueFactory {
 
     public JiraIssueRequest createIssue(String summary, String descriptionText,
                                         String dueDate, String assigneeAccountId) {
-        return createIssueWithPriority(summary, descriptionText, dueDate, assigneeAccountId, null);
+        return createIssueWithPriority(summary, descriptionText, assigneeAccountId, null);
     }
 
     public JiraIssueRequest createIssueWithPriority(String summary, String descriptionText, String dueDate,
-                                                    String assigneeAccountId, String priorityId) {
+                                                    String assigneeAccountId, String priorityName) {
         TextContent textContent = TextContent.builder()
                 .text(descriptionText)
                 .type("text")
@@ -55,8 +55,46 @@ public class JiraIssueFactory {
                 .description(description)
                 .assignee(assignee);
 
-        if (priorityId != null) {
-            fieldsBuilder.priority(Priority.builder().id(priorityId).build());
+        if (priorityName != null) {
+            fieldsBuilder.priority(Priority.builder().name(priorityName).build());
+        }
+
+        Fields fields = fieldsBuilder.build();
+
+        return JiraIssueRequest.builder()
+                .fields(fields)
+                .build();
+    }
+
+    public JiraIssueRequest createIssueWithPriority(String summary, String descriptionText,
+                                                    String assigneeAccountId, String priorityName) {
+        TextContent textContent = TextContent.builder()
+                .text(descriptionText)
+                .type("text")
+                .build();
+
+        Content content = Content.builder()
+                .content(List.of(textContent))
+                .type("paragraph")
+                .build();
+
+        Document description = Document.builder()
+                .type("doc")
+                .version(1)
+                .content(List.of(content))
+                .build();
+
+        Assignee assignee = Assignee.builder().accountId(assigneeAccountId).build();
+
+        Fields.FieldsBuilder fieldsBuilder = Fields.builder()
+                .summary(summary)
+                .issueType(IssueType.builder().id(defaultIssueTypeId).build())
+                .project(Project.builder().id(defaultProjectId).build())
+                .description(description)
+                .assignee(assignee);
+
+        if (priorityName != null) {
+            fieldsBuilder.priority(Priority.builder().name(priorityName).build());
         }
 
         Fields fields = fieldsBuilder.build();

@@ -8,15 +8,30 @@ import java.io.IOException;
 
 // Interface for API to access Elasticsearch.
 public interface ElasticsearchAccessorApi {
-    /**.
-     * Query logs by message content within a specific time range
-     *
-     * @param message The message content to search for
-     * @param minutesAgo Time range in minutes from current time
-     * @return SearchResponse containing the query results
-     * @throws IOException if the search request fails
+
+    /**
+     * Method to query logs in kibana
+     * @param indices
+     * @param message
+     * @param minutesAgo
+     * @return
+     * @throws IOException
+     * @throws InternalServiceException
      */
     SearchResponse queryLogsByMessage(String indices, String message, int minutesAgo)
+            throws IOException, InternalServiceException;
+
+    /**
+     * Method to query logs in kibana
+     * @param indices
+     * @param message
+     * @param minutesAgo
+     * @param size
+     * @return
+     * @throws IOException
+     * @throws InternalServiceException
+     */
+    SearchResponse queryLogsByMessage(String indices, String message, int minutesAgo, int size)
             throws IOException, InternalServiceException;
 
     /**.

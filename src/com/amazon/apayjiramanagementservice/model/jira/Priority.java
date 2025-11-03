@@ -6,5 +6,5 @@ import lombok.Data;
 @Data
 @Builder
 public class Priority {
-    private String id;
+    private String name;
 }

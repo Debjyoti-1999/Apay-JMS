@@ -11,7 +11,7 @@ public final class JiraClientConfigConstants {
         RECHARGE_CYGNUS_JIRA_CLIENT_CONFIG_BETA("https://amazon-sandbox.atlassian.net/rest/api/3/issue",
                  SecretsManagerClientType.JMS_SECRETS_MANAGER_BETA),
 
-        RECHARGE_CYGNUS_JIRA_CLIENT_CONFIG_PROD("",
+        RECHARGE_CYGNUS_JIRA_CLIENT_CONFIG_PROD("https://amazon-india-payments.atlassian.net/rest/api/3/issue",
                 SecretsManagerClientType.JMS_SECRETS_MANAGER_PROD);
 
         private final String baseUrl;
