@@ -22,52 +22,10 @@ public class JiraIssueFactory {
         this.defaultIssueTypeId = defaultIssueTypeId;
     }
 
-    public JiraIssueRequest createIssue(String summary, String descriptionText,
-                                        String dueDate, String assigneeAccountId) {
-        return createIssueWithPriority(summary, descriptionText, assigneeAccountId, null);
-    }
-
-    public JiraIssueRequest createIssueWithPriority(String summary, String descriptionText, String dueDate,
-                                                    String assigneeAccountId, String priorityName) {
-        TextContent textContent = TextContent.builder()
-                .text(descriptionText)
-                .type("text")
-                .build();
-
-        Content content = Content.builder()
-                .content(List.of(textContent))
-                .type("paragraph")
-                .build();
-
-        Document description = Document.builder()
-                .type("doc")
-                .version(1)
-                .content(List.of(content))
-                .build();
-
-        Assignee assignee = Assignee.builder().accountId(assigneeAccountId).build();
-
-        Fields.FieldsBuilder fieldsBuilder = Fields.builder()
-                .summary(summary)
-                .dueDate(dueDate)
-                .issueType(IssueType.builder().id(defaultIssueTypeId).build())
-                .project(Project.builder().id(defaultProjectId).build())
-                .description(description)
-                .assignee(assignee);
-
-        if (priorityName != null) {
-            fieldsBuilder.priority(Priority.builder().name(priorityName).build());
-        }
-
-        Fields fields = fieldsBuilder.build();
-
-        return JiraIssueRequest.builder()
-                .fields(fields)
-                .build();
-    }
 
     public JiraIssueRequest createIssueWithPriority(String summary, String descriptionText,
-                                                    String assigneeAccountId, String priorityName) {
+                                                    String assigneeAccountId, String priorityName,
+                                                    List<String> labels) {
         TextContent textContent = TextContent.builder()
                 .text(descriptionText)
                 .type("text")
@@ -88,10 +46,11 @@ public class JiraIssueFactory {
 
         Fields.FieldsBuilder fieldsBuilder = Fields.builder()
                 .summary(summary)
-                .issueType(IssueType.builder().id(defaultIssueTypeId).build())
+                .issueType(IssueType.builder().name(defaultIssueTypeId).build())
                 .project(Project.builder().id(defaultProjectId).build())
                 .description(description)
-                .assignee(assignee);
+                .assignee(assignee)
+                .labels(labels);
 
         if (priorityName != null) {
             fieldsBuilder.priority(Priority.builder().name(priorityName).build());

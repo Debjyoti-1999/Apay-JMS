@@ -1,6 +1,5 @@
 package com.amazon.apayjiramanagementservice.model.jira;
 
-
 import lombok.Builder;
 import lombok.Data;
 
@@ -8,5 +7,5 @@ import lombok.Data;
 @Builder
 public class IssueType {
 
-    private String id;
+    private String name;
 }

@@ -27,13 +27,13 @@ import java.util.regex.Pattern;
 
 
 //Sample details: https://amazon-india-payments.atlassian.net/rest/api/3/issue/HFCEN-1129
-// IssueType id: 1002
+// IssueType id: Bug
 
 public interface ServiceAlarmHandler {
 
     Logger log = LogManager.getLogger(ServiceAlarmHandler.class);
 
-    String JIRA_ISSUE_TYPE = "10002";
+    String JIRA_ISSUE_TYPE = "Bug";
 
     int LOG_SEARCH_INTERVAL_IN_MINUTES = 60; // to search logs since last 1 hour
 
@@ -98,7 +98,8 @@ public interface ServiceAlarmHandler {
                     ticketSummary,
                     description,
                     fulfiller.getAssigneeID(),
-                    fulfiller.getPriorityName()
+                    fulfiller.getPriorityName(),
+                    fulfiller.getLabels()
             );
 
             jiraAccessor.createJiraIssue(jiraIssueRequest);
@@ -142,7 +143,8 @@ public interface ServiceAlarmHandler {
                     ticketSummary,
                     description.toString(),
                     fulfiller.getAssigneeID(),
-                    fulfiller.getPriorityName()
+                    fulfiller.getPriorityName(),
+                    fulfiller.getLabels()
         );
         jiraAccessor.createJiraIssue(jiraIssueRequest);
 

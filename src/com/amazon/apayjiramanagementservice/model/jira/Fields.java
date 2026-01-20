@@ -1,9 +1,10 @@
 package com.amazon.apayjiramanagementservice.model.jira;
 
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 @Builder
@@ -29,4 +30,7 @@ public class Fields {
 
     @JsonProperty("priority")
     private Priority priority;
+
+    @JsonProperty("labels")
+    private List<String> labels;
 }
