@@ -27,6 +27,8 @@ public final class ElasticsearchClient {
             ElasticsearchClient> CLIENT_MAP = new ConcurrentHashMap<>();
     private final RestHighLevelClient esClient;
 
+    private static final String LAMBDA_REGION = System.getenv("AWS_REGION");
+
         private ElasticsearchClient(ElasticsearchClientConfigType clientType) {
             log.info("Creating Elasticsearch client for type: {}", clientType);
             try {
@@ -49,7 +51,7 @@ public final class ElasticsearchClient {
 
         StsClient stsClient = StsClient.builder()
                 .httpClientBuilder(ApacheHttpClient.builder())
-                .region(Region.of(elasticsearchClientConfig.getRegion()))
+                .region(Region.of(LAMBDA_REGION))
                 .build();
 
         // Create AWS SDK v2 credentials provider
