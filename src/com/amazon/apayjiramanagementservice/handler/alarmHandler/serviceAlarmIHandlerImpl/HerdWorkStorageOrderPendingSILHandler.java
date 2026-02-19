@@ -66,7 +66,7 @@ public final class HerdWorkStorageOrderPendingSILHandler implements ServiceAlarm
 
             //Query for MAKE_PAYMENT_REQUEST for each RequestId
             for (String requestId : listOfRequestIds) {
-                SearchResponse makePaymentResponseForRequestID = searchKibanaLogsByPatternForLastHour(
+                SearchResponse makePaymentResponseForRequestID = searchKibanaLogsByPatternForLastTwoHours(
                         ElasticsearchQueryParams.REQUEST_ID.getValue() + ":\"" + requestId + "\" AND "
                         + ElasticsearchQueryParams.MESSAGE.getValue() + ":\"*MAKE_PAYMENT_REQUEST*\"", 1);
 

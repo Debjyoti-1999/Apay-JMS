@@ -69,7 +69,7 @@ public final class FetchBillHighLatencyHandler implements ServiceAlarmHandler {
 
             //Get payment request for each requestId
             for (String requestId : listOfRequestIds) {
-                SearchResponse fetchBillResponseForRequestID = searchKibanaLogsByPatternForLastHour(
+                SearchResponse fetchBillResponseForRequestID = searchKibanaLogsByPatternForLastTwoHours(
                         ElasticsearchQueryParams.REQUEST_ID.getValue()
                         + ":\"" + requestId + "\""
                         + " AND "

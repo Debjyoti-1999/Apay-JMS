@@ -297,7 +297,7 @@ public final class OrderSuccessRateHandler implements ServiceAlarmHandler {
             String requestId = (String) sourceAsMap.get(ElasticsearchQueryParams.REQUEST_ID.getValue());
             if (requestId != null) {
                 // Query for LIST_PAYMENT_REQUEST using RequestId
-                SearchResponse listPaymentRequestSearch = searchKibanaLogsByPatternForLastHour(
+                SearchResponse listPaymentRequestSearch = searchKibanaLogsByPatternForLastTwoHours(
                         ElasticsearchQueryParams.REQUEST_ID.getValue()
                                 + ":\"" + requestId + "\"" + " AND "
                                 + ElasticsearchQueryParams.MESSAGE.getValue()
@@ -312,7 +312,7 @@ public final class OrderSuccessRateHandler implements ServiceAlarmHandler {
 
                     // Query for MAKE_PAYMENT_RESPONSE using orderId
                     // message:"*MAKE_PAYMENT_RESPONSE*" AND message:"*407-6808582-3935549*"
-                    SearchResponse makePaymentResponseSearch = searchKibanaLogsByPatternForLastHour(
+                    SearchResponse makePaymentResponseSearch = searchKibanaLogsByPatternForLastTwoHours(
                             ElasticsearchQueryParams.MESSAGE.getValue()
                                     + ":\"*" + orderId + "*\"" + " AND "
                                     + ElasticsearchQueryParams.MESSAGE.getValue()

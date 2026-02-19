@@ -62,6 +62,7 @@ public class ElasticsearchAccessorApiImpl implements ElasticsearchAccessorApi {
         validateQueryLogsByMessageInput(indices, message, minutesAgo);
 
         log.info("Query: {} ", message);
+        Instant now = Instant.now();
 
         SearchRequest searchRequest = new SearchRequest(indices);
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
@@ -70,8 +71,8 @@ public class ElasticsearchAccessorApiImpl implements ElasticsearchAccessorApi {
                 QueryBuilders.boolQuery()
                         .must(QueryBuilders.queryStringQuery(message))
                         .must(QueryBuilders.rangeQuery(ElasticsearchQueryParams.TIMESTAMP.getValue())
-                                .gte(Instant.now().minus(minutesAgo, ChronoUnit.MINUTES).toString())
-                                .lte(Instant.now().toString()))
+                                .gte(now.minus(minutesAgo, ChronoUnit.MINUTES).toString())
+                                .lte(now.toString()))
         ).size(size);
 
         searchSourceBuilder.sort(ElasticsearchQueryParams.TIMESTAMP.getValue(), SortOrder.ASC);

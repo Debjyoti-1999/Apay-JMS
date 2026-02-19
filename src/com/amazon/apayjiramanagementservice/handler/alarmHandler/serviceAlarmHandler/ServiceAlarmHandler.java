@@ -35,7 +35,9 @@ public interface ServiceAlarmHandler {
 
     String JIRA_ISSUE_TYPE = "Bug";
 
-    int LOG_SEARCH_INTERVAL_IN_MINUTES = 60; // to search logs since last 1 hour
+    int ONE_HOUR_INTERVAL_IN_MINUTES = 60; // to search logs since last 1 hour
+
+    int TWO_HOUR_INTERVAL_IN_MINUTES = 120; //to search logs since last 2 hours
 
     DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy.MM.dd");
 
@@ -222,9 +224,9 @@ public interface ServiceAlarmHandler {
 
 
     /**
-     * Get logs based on size
-     * @param messagePattern
-     * @param size
+     * Get logs for last 1 hour
+     * @param messagePattern pattern to search for
+     * @param size no of logs to search for
      * @return
      * @throws IOException
      */
@@ -234,8 +236,28 @@ public interface ServiceAlarmHandler {
                 .queryLogsByMessage("logstash-cygnus-applicationlog-"
                                 + LocalDate.now(ZoneId.of("UTC")).format(DATE_FORMATTER),
                         messagePattern,
-                        LOG_SEARCH_INTERVAL_IN_MINUTES, size);
+                        ONE_HOUR_INTERVAL_IN_MINUTES, size);
     }
+
+
+    /**
+     * Get logs based on size for last 1 hour
+     * @param messagePattern pattern to search for
+     * @param size no of logs to search for
+     * @return
+     * @throws IOException
+     */
+
+    default SearchResponse searchKibanaLogsByPatternForLastTwoHours(String messagePattern,
+                                                                    int size) throws IOException {
+        return new ElasticsearchAccessorApiImpl(
+                ElasticsearchClientConfigType.RECHARGE_CYGNUS_PROD)
+                .queryLogsByMessage("logstash-cygnus-applicationlog-"
+                                + LocalDate.now(ZoneId.of("UTC")).format(DATE_FORMATTER),
+                        messagePattern,
+                        TWO_HOUR_INTERVAL_IN_MINUTES, size);
+    }
+
 
     /**
      * Method to get the first log message from list
