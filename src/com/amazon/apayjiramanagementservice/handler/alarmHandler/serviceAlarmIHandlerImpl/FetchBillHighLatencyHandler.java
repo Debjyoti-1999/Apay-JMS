@@ -81,6 +81,8 @@ public final class FetchBillHighLatencyHandler implements ServiceAlarmHandler {
 
             //Get EuronetRefNo or BD-Traceid (trackingId for each RequestId)
             for (String requestId: listOfRequestIds) {
+                log.info("Fetchbill response for request Id: {} | {} ", requestId,
+                        mapOfRequestIdToFetchBillRequest.get(requestId));
                 Fulfillers fulfiller = getFulfiller(mapOfRequestIdToFetchBillRequest.get(requestId));
                 if (fulfiller != null) {
                     switch (fulfiller) {

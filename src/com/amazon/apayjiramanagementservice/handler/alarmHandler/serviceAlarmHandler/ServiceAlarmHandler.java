@@ -157,9 +157,11 @@ public interface ServiceAlarmHandler {
      */
     default Fulfillers getFulfiller(String paymentRequest) {
         if (paymentRequest == null || paymentRequest.isEmpty()) {
+            log.info("paymentRequest is null or empty");
             return null;
         }
         String upperCaseRequest = paymentRequest.toUpperCase();
+        log.info("upperCaseRequest: " + upperCaseRequest);
 
         for (Fulfillers fulfiller : Fulfillers.values()) {
             if (upperCaseRequest.contains(fulfiller.name())) {
@@ -241,8 +243,11 @@ public interface ServiceAlarmHandler {
      * @return
      */
     default String getFirstMessageFromLogs(SearchResponse searchResponse) {
+
+        log.info("Search response size: {}", searchResponse.getHits().getTotalHits());
         for (SearchHit hit : searchResponse.getHits().getHits()) {
             Map<String, Object> sourceAsMap = hit.getSourceAsMap();
+            log.info("Log from search response: {}", sourceAsMap.get(ElasticsearchQueryParams.MESSAGE.getValue()));
             return (String) sourceAsMap.get(ElasticsearchQueryParams.MESSAGE.getValue());
         }
         return null;
