@@ -73,7 +73,7 @@ public final class ValidateBillPaymentLatencyHandler implements ServiceAlarmHand
                 log.info("ValidateBill response for request Id: {} | {} ", requestId,
                         mapOfRequestIdToPaymentResponse.get(requestId));
 
-                SearchResponse validatePaymentResponseForRequestID = searchKibanaLogsByPatternForLastTwoHours(
+                SearchResponse validatePaymentResponseForRequestID = searchKibanaLogsByPatternAndSize(
                         ElasticsearchQueryParams.REQUEST_ID.getValue()
                                 + ":\""
                                 + requestId + "\"" + " AND "

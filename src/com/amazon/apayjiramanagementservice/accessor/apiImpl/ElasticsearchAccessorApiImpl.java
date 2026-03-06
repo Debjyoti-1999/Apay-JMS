@@ -81,30 +81,25 @@ public class ElasticsearchAccessorApiImpl implements ElasticsearchAccessorApi {
         return executeWithRetry(searchRequest, MAX_RETRIES);
     }
 
+
     @Override
-    public SearchResponse queryLogsWithConditions(String indices, String message, String level,
-                                                  String serviceName, int minutesAgo)
+    public SearchResponse queryLogsByMessageAndSize(String indices, String message, int size)
             throws IOException, InternalServiceException {
-        // Input validation
-        validateQueryLogsWithConditionsInput(indices, message, level, serviceName, minutesAgo);
-            SearchRequest searchRequest = new SearchRequest(indices);
-            SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 
-            searchSourceBuilder.query(
-                    QueryBuilders.boolQuery()
-                            .must(QueryBuilders.queryStringQuery(message))
-                            .must(QueryBuilders.matchQuery(ElasticsearchQueryParams.LEVEL.getValue(), level))
-                            .must(QueryBuilders.matchQuery(ElasticsearchQueryParams.SERVICE_NAME.getValue(),
-                                    serviceName))
-                            .must(QueryBuilders.rangeQuery(ElasticsearchQueryParams.TIMESTAMP.getValue())
-                                    .gte(Instant.now().minus(minutesAgo, ChronoUnit.MINUTES).toString())
-                                    .lte(Instant.now().toString()))
-            );
+        log.info("Query: {} ", message);
 
-            searchSourceBuilder.sort(ElasticsearchQueryParams.TIMESTAMP.getValue(), SortOrder.DESC);
-            searchRequest.source(searchSourceBuilder);
+        SearchRequest searchRequest = new SearchRequest(indices);
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 
-            return executeWithRetry(searchRequest, MAX_RETRIES);
+        searchSourceBuilder.query(
+                QueryBuilders.boolQuery()
+                        .must(QueryBuilders.queryStringQuery(message))
+        );
+
+        searchSourceBuilder.sort(ElasticsearchQueryParams.TIMESTAMP.getValue(), SortOrder.DESC);
+        searchRequest.source(searchSourceBuilder);
+
+        return executeWithRetry(searchRequest, MAX_RETRIES);
     }
 
     private SearchResponse executeWithRetry(SearchRequest request, int maxRetries)

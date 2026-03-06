@@ -81,7 +81,8 @@ public interface ServiceAlarmHandler {
 
                 //map log details(for each fulfiller) to fulfiller
                 StringBuilder description = fulfillerToDescription.computeIfAbsent(fulfiller, k -> new StringBuilder());
-                description.append(mapOfRequestIdToTrackingId.get(requestId)).append("\n");
+                description.append("Tracking ID(ref no/trace id): ")
+                        .append(mapOfRequestIdToTrackingId.get(requestId)).append("\n");
                 description.append(paymentRequest).append("\n").append(paymentResponse).append("\n\n");
 
             } else {
@@ -183,7 +184,7 @@ public interface ServiceAlarmHandler {
     default void extractEuronetTrackingId(String requestId, Map<String, String> mapOfRequestIdToTrackingId)
             throws IOException {
 
-            SearchResponse searchResponse = searchKibanaLogsByPatternForLastHour(
+            SearchResponse searchResponse = searchKibanaLogsByPatternAndSize(
                     ElasticsearchQueryParams.REQUEST_ID.getValue() + ":\"" + requestId + "\"" +
                             " AND " + ElasticsearchQueryParams.MESSAGE.getValue() + ":\"*" + EURONET_REF_NO + "*\"", 1);
 
@@ -207,7 +208,7 @@ public interface ServiceAlarmHandler {
     default void extractBillDeskTrackingId(String requestId, Map<String, String> mapOfRequestIdToTrackingId)
             throws IOException {
 
-            SearchResponse searchResponse = searchKibanaLogsByPatternForLastHour(
+            SearchResponse searchResponse = searchKibanaLogsByPatternAndSize(
                     ElasticsearchQueryParams.REQUEST_ID.getValue() + ":\"" + requestId + "\"" +
                             " AND " + ElasticsearchQueryParams.MESSAGE.getValue() + ":\"*" + BD_TRACE_ID + "*\"", 1);
 
@@ -241,21 +242,20 @@ public interface ServiceAlarmHandler {
 
 
     /**
-     * Get logs based on size for last 1 hour
+     * Get logs based on pattern
      * @param messagePattern pattern to search for
      * @param size no of logs to search for
      * @return
      * @throws IOException
      */
 
-    default SearchResponse searchKibanaLogsByPatternForLastTwoHours(String messagePattern,
-                                                                    int size) throws IOException {
+    default SearchResponse searchKibanaLogsByPatternAndSize(String messagePattern,
+                                                            int size) throws IOException {
         return new ElasticsearchAccessorApiImpl(
                 ElasticsearchClientConfigType.RECHARGE_CYGNUS_PROD)
-                .queryLogsByMessage("logstash-cygnus-applicationlog-"
+                .queryLogsByMessageAndSize("logstash-cygnus-applicationlog-"
                                 + LocalDate.now(ZoneId.of("UTC")).format(DATE_FORMATTER),
-                        messagePattern,
-                        TWO_HOUR_INTERVAL_IN_MINUTES, size);
+                        messagePattern, size);
     }
 
 
