@@ -99,12 +99,18 @@ public final class FetchBillHighLatencyHandler implements ServiceAlarmHandler {
                 }
             }
 
-            // Create JIRA tickets for each high latency fetch bill request
+            // Create JIRA tickets for each high latency fetch bill request and
+            // send email notification after successful ticket creation
             if (!listOfRequestIds.isEmpty()) {
                 createJiraTicket(listOfRequestIds,
                     mapOfRequestIdToFetchBillRequest, mapOfRequestIdToFetchBillResponse,
                         mapOfRequestIdToTrackingId,
                     "High Latency Issue in FetchBill API");
+
+                sendEmailNotification("FetchBill high latency alarm jira ticket created",
+                        "Automated email from JIRA Management Service " +
+                                "\n List Of requestIds for order success rate alarm: " + listOfRequestIds);
+
             }
     }
 

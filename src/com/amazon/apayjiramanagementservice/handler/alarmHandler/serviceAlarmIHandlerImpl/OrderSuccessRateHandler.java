@@ -128,12 +128,16 @@ public final class OrderSuccessRateHandler implements ServiceAlarmHandler {
                     mapOfMerchantRefNoToPaymentRequest, mapOfMerchantRefNoToPaymentResponse,
                     mapOfRequestIdToTrackingId,
                     "Drop in order success rate");
+
+            sendNotificationForOrderSuccessDrop(listOfRequestIds);
         }
         if (!mapOfSourceRefNoToPaymentRequest.isEmpty()) {
             createJiraTicket(listOfRequestIds,
                     mapOfSourceRefNoToPaymentRequest, mapOfSourceRefNoToPaymentResponse,
                     mapOfRequestIdToTrackingId,
                     "Drop in order success rate");
+
+            sendNotificationForOrderSuccessDrop(listOfRequestIds);
         }
 
         return true;
@@ -193,15 +197,25 @@ public final class OrderSuccessRateHandler implements ServiceAlarmHandler {
                     mapOfMerchantRefNoToPaymentRequest, mapOfMerchantRefNoToPaymentResponse,
                     mapOfRequestIdToTrackingId,
                     "Drop in order success rate", Fulfillers.EURONET);
+
+            sendNotificationForOrderSuccessDrop(listOfRequestIds);
         }
         if (!mapOfSourceRefNoToPaymentRequest.isEmpty()) {
             createJiraTicket(listOfRequestIds,
                     mapOfSourceRefNoToPaymentRequest, mapOfSourceRefNoToPaymentResponse,
                     mapOfRequestIdToTrackingId,
                     "Drop in order success rate", Fulfillers.BILLDESK);
+
+            sendNotificationForOrderSuccessDrop(listOfRequestIds);
         }
 
         return true;
+    }
+
+    private void sendNotificationForOrderSuccessDrop(List<String> listOfRequestIds) {
+        sendEmailNotification("Order Success Rate alarm jira ticket created",
+                "Automated email from JIRA Management Service " +
+                        "\n List Of requestIds for Order Success rate alarm: " + listOfRequestIds);
     }
 
 

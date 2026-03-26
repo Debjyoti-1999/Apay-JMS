@@ -23,8 +23,9 @@ package.APayJiraManagementService = {
             AwsJavaSdk-ElasticsearchService = 2.0;
             Maven-org-elasticsearch-client_elasticsearch-rest-high-level-client = 7.10.2;
             Aws-request-signing-apache-interceptor = 3.x;
-            AwsJavaSdk-Sts = 2.0;
             AwsJavaSdk-SecretsManager = 2.0;
+            AwsJavaSdk-Sts = 2.0;
+            AwsJavaSdk-Ses = 2.0;
         };
     };
 

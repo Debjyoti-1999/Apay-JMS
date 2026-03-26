@@ -112,6 +112,10 @@ public final class ValidateBillPaymentLatencyHandler implements ServiceAlarmHand
                     mapOfRequestIdToPaymentRequest, mapOfRequestIdToPaymentResponse,
                         mapOfRequestIdToTrackingId,
                     "Issue in ValidateBill API");
+
+                sendEmailNotification("Validate Bill Payment high latency alarm jira ticket created",
+                        "Automated email from JIRA Management Service " +
+                                "\n List Of requestIds for Validate Bill Payment alarm: " + listOfRequestIds);
             }
 
     }

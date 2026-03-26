@@ -1,13 +1,16 @@
 package com.amazon.apayjiramanagementservice.handler.alarmHandler.serviceAlarmHandler;
 
 import com.amazon.apayjiramanagementservice.accessor.apiImpl.ElasticsearchAccessorApiImpl;
+import com.amazon.apayjiramanagementservice.accessor.apiImpl.EmailNotificationApiImpl;
 import com.amazon.apayjiramanagementservice.accessor.apiImpl.JiraAccessorApiImpl;
 import com.amazon.apayjiramanagementservice.config.elasticsearch.ElasticsearchClientConfigType;
+import com.amazon.apayjiramanagementservice.config.email.EmailClientConfigType;
 import com.amazon.apayjiramanagementservice.config.jira.JiraClientConfigType;
 import com.amazon.apayjiramanagementservice.constants.ThirdParty.Fulfillers;
 import com.amazon.apayjiramanagementservice.constants.elastisearch.ElasticsearchQueryParams;
 import com.amazon.apayjiramanagementservice.helper.JiraIssueFactory;
 import com.amazon.apayjiramanagementservice.model.alarmEvents.CloudwatchAlarmEvent;
+import com.amazon.apayjiramanagementservice.model.email.EmailNotificationRequest;
 import com.amazon.apayjiramanagementservice.model.jira.JiraIssueRequest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -108,6 +111,22 @@ public interface ServiceAlarmHandler {
             jiraAccessor.createJiraIssue(jiraIssueRequest);
 
         }
+    }
+
+
+    /**
+     * Sends email notifications
+     *Sender and receiver emails are fetched from Email config (since these will be constants)
+     * @param subject subject of mail
+     * @param body body of email
+     *
+     */
+
+    default void sendEmailNotification(String subject, String body) {
+        EmailNotificationApiImpl emailNotificationApi =
+                new EmailNotificationApiImpl(EmailClientConfigType.RECHARGE_CYGNUS_SES_CLIENT_PROD);
+       emailNotificationApi.sendEmail(EmailNotificationRequest.builder().
+               body(body).subject(subject).build());
     }
 
 
@@ -293,5 +312,6 @@ public interface ServiceAlarmHandler {
         }
         return null;
     }
+
 
 }

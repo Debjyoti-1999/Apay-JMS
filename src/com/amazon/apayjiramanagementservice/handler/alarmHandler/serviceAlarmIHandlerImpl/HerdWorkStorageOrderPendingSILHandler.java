@@ -101,6 +101,10 @@ public final class HerdWorkStorageOrderPendingSILHandler implements ServiceAlarm
                         mapOfRequestIdToMakePaymentRequest, mapOfRequestIdToMakePaymentResponse,
                         mapOfRequestIdToTrackingId,
                         "Pending order count increase");
+
+                sendEmailNotification("Order Pending Sil alarm jira ticket created",
+                        "Automated email from JIRA Management Service " +
+                                "\n List Of requestIds for Order Pending Sil alarm: " + listOfRequestIds);
             }
 
     }
