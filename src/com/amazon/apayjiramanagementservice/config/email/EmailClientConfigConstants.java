@@ -16,8 +16,7 @@ public final class EmailClientConfigConstants {
 
         RECHARGE_CYGNUS_SES_CLIENT_CONFIG_PROD(
                 "ace-serviceaccount-amazon-india-payments-apay-jms@amazon.com",
-                List.of("page-hfc-primary@amazon.com",
-                        "hfc-platform@amazon.com")
+                List.of("hfc-platform-primary-oncall@amazon.com")
         );
 
         private final String senderEmail;
