@@ -27,8 +27,8 @@ public class JiraAccessorApiImpl implements JiraAccessorApi {
             validateJiraIssueRequest(request);
                 HttpResponse<String> response = executeWithRetry(request, 2);
                 if (response != null && (response.statusCode() < 200 || response.statusCode() >= 300)) {
-                    log.error("Failed to create jira ticket: {} | Status code: {}",
-                            response.body(), response.statusCode());
+                    log.error("Status code: {} | Failed to create jira ticket: {}",
+                            response.statusCode(), response.body());
 
                     throw new DependencyFailureException(
                             response.body() // failure in jira while creating ticket

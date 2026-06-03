@@ -183,7 +183,6 @@ public interface ServiceAlarmHandler {
             return null;
         }
         String upperCaseRequest = paymentRequest.toUpperCase();
-        log.info("upperCaseRequest: " + upperCaseRequest);
 
         for (Fulfillers fulfiller : Fulfillers.values()) {
             if (upperCaseRequest.contains(fulfiller.name())) {
@@ -288,7 +287,6 @@ public interface ServiceAlarmHandler {
         log.info("Search response size: {}", searchResponse.getHits().getTotalHits());
         for (SearchHit hit : searchResponse.getHits().getHits()) {
             Map<String, Object> sourceAsMap = hit.getSourceAsMap();
-            log.info("Log from search response: {}", sourceAsMap.get(ElasticsearchQueryParams.MESSAGE.getValue()));
             return (String) sourceAsMap.get(ElasticsearchQueryParams.MESSAGE.getValue());
         }
         return null;

@@ -40,6 +40,7 @@ public final class FetchBillHighLatencyHandler implements ServiceAlarmHandler {
     public void handleEvent(CloudwatchAlarmEvent cloudwatchAlarmEvent) throws Exception {
 
             if (!cloudwatchAlarmEvent.getNewStateValue().equals("ALARM")) { // alarm state != ALARM (no action required)
+                log.info("Alarm state: {}", cloudwatchAlarmEvent.getNewStateValue());
                 return;
             }
 
@@ -109,7 +110,7 @@ public final class FetchBillHighLatencyHandler implements ServiceAlarmHandler {
 
                 sendEmailNotification("FetchBill high latency alarm jira ticket created",
                         "Automated email from JIRA Management Service " +
-                                "\n List Of requestIds for order success rate alarm: " + listOfRequestIds);
+                                "\n List Of requestIds for FetchBill high latency alarm: " + listOfRequestIds);
 
             }
     }
